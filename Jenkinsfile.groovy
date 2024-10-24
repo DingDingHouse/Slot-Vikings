@@ -1,7 +1,7 @@
 def PROJECT_NAME = "Slot-Vikings"
 def UNITY_VERSION = "2022.3.48f1"
 def UNITY_INSTALLATION = "C:\\Program Files\\Unity\\Hub\\Editor\\${UNITY_VERSION}\\Editor\\Unity.exe"
-def REPO_URL = "git@github.com:Prathm0025/Slot-Vikings.git"
+def REPO_URL = "git@github.com:DingDingHouse/Slot-Vikings.git"
 
 pipeline {
     agent any
@@ -22,7 +22,7 @@ pipeline {
                     bat '''
                     cd /d D:\\
                     git config --global http.postBuffer 3221225472
-                    git clone git@github.com:Prathm0025/Slot-Vikings.git Slot-Vikings || echo "Repository already exists, pulling latest changes."
+                    git clone git@github.com:DingDingHouse/Slot-Vikings.git Slot-Vikings || echo "Repository already exists, pulling latest changes."
                     cd Slot-Vikings
                     git fetch --all
                     git reset --hard origin/develop
