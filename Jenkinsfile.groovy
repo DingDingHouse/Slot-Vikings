@@ -19,38 +19,18 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Change to the D drive
-                    bat "D:"
-
-                    // Check if the project path exists
-                    if (fileExists(PROJECT_PATH)) {
-                        // If the directory exists, navigate into it
-                        dir(PROJECT_PATH) {
-                            retry(3) { // Retry up to 3 times
-                                try {
-                                    // Force pull latest changes and discard local changes
-                                    bat '''
-                                    git checkout develop
-                                    git fetch --all
-                                    git reset --hard origin/develop
-                                    '''
-                                } catch (Exception e) {
-                                    error "Pulling changes failed: ${e.message}"
-                                }
-                            }
-                        }
-                    } else {
-                        // If the directory doesn't exist, clone the repository
-                        bat '''
-                        git config --global http.postBuffer 3221225472
-                        git clone ${REPO_URL} D:\\Slot-Vikings
-                        git checkout develop
-                        '''
-                    }
+                    bat '''
+                    cd /d D:\\
+                    git config --global http.postBuffer 3221225472
+                    git clone git@github.com:Prathm0025/Slot-Vikings.git Slot-Vikings || echo "Repository already exists, pulling latest changes."
+                    cd Slot-Vikings
+                    git fetch --all
+                    git reset --hard origin/develop
+                    git checkout develop
+                    '''
                 }
             }
         }
-
         stage('Build WebGL') {
             steps {
                 script {
@@ -72,6 +52,7 @@ pipeline {
                         git clean -fd
                         git stash --include-untracked
                         git checkout main 
+                        git pull origin main
                         git rm -r -f Builds 
                         git add .
                         git commit -m "delete old Builds"
@@ -81,6 +62,7 @@ pipeline {
                         git checkout develop -- Builds
                         git add -f Builds
                         git commit -m "adding new Builds"
+                        git pull
                         git push origin main
                         '''
                     }
@@ -93,12 +75,24 @@ pipeline {
                 script {
                     dir("${PROJECT_PATH}") {
                         bat '''
-                        REM Copy all files, including .html files, to S3
-                        aws s3 cp "Builds/WebGL/" s3://%S3_BUCKET%/ --recursive --acl public-read
-
+                        REM Copy all .html files to S3 with the correct content type
+                        aws s3 cp "Builds/WebGL/" s3://%S3_BUCKET%/ --recursive --acl public-read --exclude "*" --include "*.html" --content-type "text/html"
+                        
+                        REM Copy .data files to S3 with the correct content type
+                        aws s3 cp "Builds/WebGL/" s3://%S3_BUCKET%/ --recursive --acl public-read --exclude "*" --include "*.data" --content-type "application/octet-stream"
+                        
+                        REM Copy .framework.js files to S3 with the correct content type
+                        aws s3 cp "Builds/WebGL/" s3://%S3_BUCKET%/ --recursive --acl public-read --exclude "*" --include "*.framework.js" --content-type "application/javascript"
+                        
+                        REM Copy .loader.js files to S3 with the correct content type
+                        aws s3 cp "Builds/WebGL/" s3://%S3_BUCKET%/ --recursive --acl public-read --exclude "*" --include "*.loader.js" --content-type "application/javascript"
+                        
+                        REM Copy .wasm files to S3 with the correct content type
+                        aws s3 cp "Builds/WebGL/" s3://%S3_BUCKET%/ --recursive --acl public-read --exclude "*" --include "*.wasm" --content-type "application/octet-stream"
+                        
                         REM Move index.html to the root for S3 hosting
-                        aws s3 cp "Builds/WebGL/index.html" s3://%S3_BUCKET%/index.html --acl public-read
-
+                        aws s3 cp "Builds/WebGL/index.html" s3://%S3_BUCKET%/index.html --acl public-read --content-type "text/html"
+                        
                         REM Optional: Set S3 bucket for static web hosting
                         aws s3 website s3://%S3_BUCKET%/ --index-document index.html --error-document index.html
                         '''
