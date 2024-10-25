@@ -51,6 +51,8 @@ pipeline {
                     dir("${PROJECT_PATH}") {
                         bat '''
                         hostname
+                        git config --global user.email "prathamesh@underpinservices.com"
+                        git config --global user.name "Prathm0025"
                         git clean -fd
                         git stash --include-untracked
                         git checkout develop
