@@ -51,6 +51,7 @@ pipeline {
                     dir("${PROJECT_PATH}") {
                         bat '''
                         hostname
+                        whoami
                         ssh -T git@github.com
                         git config --global user.email "prathamesh@underpinservices.com"
                         git config --global user.name "Prathm0025"
