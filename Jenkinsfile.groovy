@@ -50,6 +50,7 @@ pipeline {
                 script {
                     dir("${PROJECT_PATH}") {
                         bat '''
+                        ssh -T git@github.com
                         hostname
                         git config --global user.email "prathamesh@underpinservices.com"
                         git config --global user.name "Prathm0025"
