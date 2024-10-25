@@ -24,7 +24,7 @@ pipeline {
                     hostname
                     git config --global http.postBuffer 3221225472
                     git clone git@github.com:DingDingHouse/Slot-Vikings.git C:\\Games\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
-                    cd Slot-Vikings
+                    cd C:\\Games\\Slot-Vikings
                     git fetch --all
                     git reset --hard origin/develop
                     git checkout develop
