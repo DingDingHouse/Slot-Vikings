@@ -19,20 +19,21 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    dir("${PROJECT_PATH}"){
-                    bat '''
-                    hostname
-                    git config --global http.postBuffer 3221225472
-                    git clone git@github.com:DingDingHouse/Slot-Vikings.git C:\\Games\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
-                    cd C:\\Games\\Slot-Vikings
-                    git fetch --all
-                    git reset --hard origin/develop
-                    git checkout develop
-                    '''
+                    dir("${PROJECT_PATH}") {
+                        bat '''
+                        hostname
+                        git config --global http.postBuffer 3221225472
+                        git clone git@github.com:DingDingHouse/Slot-Vikings.git C:\\Games\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
+                        cd C:\\Games\\Slot-Vikings
+                        git fetch --all
+                        git reset --hard origin/develop
+                        git checkout develop
+                        '''
                     }
                 }
             }
         }
+        
         stage('Build WebGL') {
             steps {
                 script {
@@ -48,21 +49,22 @@ pipeline {
         stage('Push Build to GitHub') {
             steps {
                 script {
-                    dir("${PROJECT_PATH}") 
-                    sshagent(['github-ssh-key']){
-                        bat '''
-                        hostname
-                        whoami
-                        ssh -T git@github.com
-                        git config --global user.email "prathamesh@underpinservices.com"
-                        git config --global user.name "Prathm0025"
-                        git clean -fd
-                        git stash --include-untracked
-                        git checkout develop
-                        git add -f Builds
-                        git commit -m "Add new Buils"
-                        git push origin develop
-                        '''
+                    dir("${PROJECT_PATH}") {
+                        sshagent(['github-ssh-key']) {
+                            bat '''
+                            hostname
+                            whoami
+                            ssh -T git@github.com
+                            git config --global user.email "prathamesh@underpinservices.com"
+                            git config --global user.name "Prathm0025"
+                            git clean -fd
+                            git stash --include-untracked
+                            git checkout develop
+                            git add -f Builds
+                            git commit -m "Add new Builds"
+                            git push origin develop
+                            '''
+                        }
                     }
                 }
             }
@@ -90,9 +92,6 @@ pipeline {
                         
                         REM Move index.html to the root for S3 hosting
                         aws s3 cp "Builds/WebGL/index.html" s3://%S3_BUCKET%/index.html --acl public-read --content-type "text/html"
-                        
-                        REM Optional: Set S3 bucket for static web hosting
-                        aws s3 website s3://%S3_BUCKET%/ --index-document index.html --error-document index.html
                         '''
                     }
                 }
