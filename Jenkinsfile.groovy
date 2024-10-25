@@ -21,6 +21,7 @@ pipeline {
                 script {
                     dir("${PROJECT_PATH}"){
                     bat '''
+                    hostname
                     git config --global http.postBuffer 3221225472
                     git clone git@github.com:DingDingHouse/Slot-Vikings.git C:\\Games\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
                     cd Slot-Vikings
