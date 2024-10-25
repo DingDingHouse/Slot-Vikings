@@ -1,5 +1,5 @@
 def PROJECT_NAME = "Slot-Vikings"
-def UNITY_VERSION = "2022.3.48f1"
+def UNITY_VERSION = "2022.3.51f1"
 def UNITY_INSTALLATION = "C:\\Program Files\\Unity\\Hub\\Editor\\${UNITY_VERSION}\\Editor\\Unity.exe"
 def REPO_URL = "git@github.com:DingDingHouse/Slot-Vikings.git"
 
@@ -11,7 +11,7 @@ pipeline {
     }
 
     environment {
-        PROJECT_PATH = "D:\\Slot-Vikings"
+        PROJECT_PATH = "C:\\Games\\Slot-Vikings"
         S3_BUCKET = "vikingsbucket"
     }
 
@@ -19,15 +19,16 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
+                    dir("${PROJECT_PATH}"){
                     bat '''
-                    cd /d D:\\
                     git config --global http.postBuffer 3221225472
-                    git clone git@github.com:DingDingHouse/Slot-Vikings.git Slot-Vikings || echo "Repository already exists, pulling latest changes."
+                    git clone git@github.com:DingDingHouse/Slot-Vikings.git C:\\Games\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
                     cd Slot-Vikings
                     git fetch --all
                     git reset --hard origin/develop
                     git checkout develop
                     '''
+                    }
                 }
             }
         }
@@ -51,19 +52,10 @@ pipeline {
                         hostname
                         git clean -fd
                         git stash --include-untracked
-                        git checkout main 
-                        git pull origin main
-                        git rm -r -f Builds 
-                        git add .
-                        git commit -m "delete old Builds"
-                        git push origin main
-
-                        git checkout main
-                        git checkout develop -- Builds
+                        git checkout develop
                         git add -f Builds
-                        git commit -m "adding new Builds"
-                        git pull
-                        git push origin main
+                        git commit -m "Add new Buils"
+                        git push origin develop
                         '''
                     }
                 }
