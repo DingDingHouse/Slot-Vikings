@@ -48,7 +48,8 @@ pipeline {
         stage('Push Build to GitHub') {
             steps {
                 script {
-                    dir("${PROJECT_PATH}") {
+                    dir("${PROJECT_PATH}") 
+                    sshagent(['github-ssh-key']){
                         bat '''
                         hostname
                         whoami
