@@ -46,30 +46,7 @@ pipeline {
             }
         }
 
-        stage('Push Build to GitHub') {
-            steps {
-                script {
-                    dir("${PROJECT_PATH}") {
-                        sshagent(['github-ssh-key']) {
-                            bat '''
-                            hostname
-                            whoami
-                            ssh -T git@github.com
-                            git config --global user.email "prathamesh@underpinservices.com"
-                            git config --global user.name "Prathm0025"
-                            git clean -fd
-                            git stash --include-untracked
-                            git checkout develop
-                            git add -f Builds
-                            git commit -m "Add new Builds"
-                            git push origin develop
-                            '''
-                        }
-                    }
-                }
-            }
-        }
-
+    
         stage('Deploy to S3') {
             steps {
                 script {
