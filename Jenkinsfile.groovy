@@ -46,6 +46,25 @@ pipeline {
             }
         }
 
+        stage('Push Build to GitHub') {
+            steps {
+                script {
+                    dir("${PROJECT_PATH}") {
+                        bat '''
+                        hostname
+                        whoami
+                        echo %USERNAME%
+                        git clean -fd
+                        git checkout develop
+                        git add -f Builds
+                        git commit -m "Add new Builds"
+                        git push origin develop
+                        '''
+                    }
+                }
+            }
+        }
+
     
         stage('Deploy to S3') {
             steps {
