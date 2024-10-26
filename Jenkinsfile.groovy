@@ -53,7 +53,8 @@ pipeline {
                         bat '''
                         hostname
                         whoami
-                        echo %USERNAME%
+                        git config --global user.email "prathamesh@underpinservices.com"
+                        git config --global user.name "Prathm25"
                         git clean -fd
                         git checkout develop
                         git add -f Builds
