@@ -56,10 +56,16 @@ pipeline {
                         git config --global user.email "prathamesh@underpinservices.com"
                         git config --global user.name "Prathm25"
                         git clean -fd
-                        git checkout develop
+                        git checkout --orphan artifact
+                        git rm -rf Builds || echo "No existing artifact to delete"
+                        git add -f Builds
+                        git commit -m "Remove old Builds"
+                        git push origin artifact
+                        git pull
+                        git checkout develop -- Builds 
                         git add -f Builds
                         git commit -m "Add new Builds"
-                        git push origin develop
+                        git push origin artifact
                         '''
                     }
                 }
