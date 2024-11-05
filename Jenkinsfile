@@ -24,9 +24,9 @@ pipeline {
                     git config --global http.postBuffer 3221225472
                     git clone git@github.com:Prathm0025/Slot-Vikings.git D:\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
                     cd Slot-Vikings
+                    git checkout artifact
                     git fetch --all
                     git reset --hard origin/develop
-                    git reset --hard origin/artifact
                     git checkout develop
                     '''
                 }
