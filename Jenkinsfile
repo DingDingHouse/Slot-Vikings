@@ -57,6 +57,7 @@ pipeline {
                         git config --global user.name "Prathm25"
                         git clean -fd
                         git checkout --orphan artifact
+                        git stath -fd
                         git checkout artifact
                         git rm -rf .
                         git add -f .
