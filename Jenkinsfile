@@ -26,6 +26,7 @@ pipeline {
                     cd Slot-Vikings
                     git fetch --all
                     git reset --hard origin/develop
+                    git reset --hard origin/artifact
                     git checkout develop
                     '''
                 }
