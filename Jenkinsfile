@@ -57,7 +57,8 @@ pipeline {
                         git config --global user.name "Prathm25"
                         git clean -fd
                         git checkout --orphan artifact
-                        git rm -rf Builds || echo "No existing artifact to delete"
+                        git branch
+                        git rm -rf .
                         git add -f .
                         git commit --allow-empty -m "Initial empty commit on artifact branch" || git commit -m "Remove old Builds"
                         git push origin artifact
