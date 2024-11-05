@@ -56,14 +56,14 @@ pipeline {
                         git rm -r -f Builds 
                         git add .
                         git commit -m "delete old Builds"
-                        git push origin main
+                        git push origin artifact
 
                         git checkout artifact
                         git checkout develop -- Builds
                         git add -f Builds
                         git commit -m "adding new Builds"
                         git pull
-                        git push origin main
+                        git push origin artifact
                         '''
                     }
                 }
