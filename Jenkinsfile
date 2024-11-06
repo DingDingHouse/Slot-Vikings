@@ -27,6 +27,7 @@ pipeline {
                     git checkout artifact
                     git fetch --all
                     git reset --hard origin/develop
+                    git reset --hard origin/artifact
                     git checkout develop
                     '''
                 }
