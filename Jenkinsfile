@@ -51,6 +51,9 @@ pipeline {
                     dir("${PROJECT_PATH}") {
                         bat '''
                         hostname
+                        git add Builds
+                        git commit -m "new build"
+                        git push origin develop
                         git stash -u
                         git checkout artifact 
                         git rm -r -f Builds
@@ -66,6 +69,7 @@ pipeline {
                         git add -f Build index.html
                         git commit -m "adding new Builds"
                         git push origin artifact
+                        git checkout develop
                         '''
                     }
                 }
