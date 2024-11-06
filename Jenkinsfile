@@ -24,10 +24,10 @@ pipeline {
                     git config --global http.postBuffer 3221225472
                     git clone git@github.com:DingDingHouse/Slot-Vikings.git D:\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
                     cd Slot-Vikings
-                    git checkout artifact
+                    git checkout main
                     git fetch --all
                     git reset --hard origin/develop
-                    git reset --hard origin/artifact
+                    git reset --hard origin/main
                     git checkout develop
                     '''
                 }
@@ -55,40 +55,20 @@ pipeline {
                         git commit -m "new build"
                         git push origin develop
                         git stash -u
-                        git checkout artifact 
-                        git rm -r -f Builds
+                        git checkout main
                         git rm -r -f Build
                         git rm -r -f index.html
                         git commit -m "delete old Builds"
-                        git push origin artifact
+                        git push origin main
 
-                        git checkout artifact
+                        git checkout main
                         git checkout develop -- Builds
                         robocopy Builds\\WebGL\\ .\\ /move /e /copyall
                         git rm -r -f Builds
                         git add -f Build index.html
                         git commit -m "adding new Builds"
-                        git push origin artifact
+                        git push origin main
                         git checkout develop
-                        '''
-                    }
-                }
-            }
-        }
-
-        stage('Deploy to S3') {
-            steps {
-                script {
-                    dir("${PROJECT_PATH}") {
-                        bat '''
-                        REM Copy all files, including .html files, to S3
-                        aws s3 cp "Builds/WebGL/" s3://%S3_BUCKET%/ --recursive --acl public-read
-
-                        REM Move index.html to the root for S3 hosting
-                        aws s3 cp "Builds/WebGL/index.html" s3://%S3_BUCKET%/index.html --acl public-read
-
-                        REM Optional: Set S3 bucket for static web hosting
-                        aws s3 website s3://%S3_BUCKET%/ --index-document index.html --error-document index.html
                         '''
                     }
                 }
