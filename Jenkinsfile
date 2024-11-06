@@ -69,6 +69,7 @@ pipeline {
                         git commit -m "adding new Builds"
                         git push origin main
                         git checkout develop
+                        git pull origin develop
                         '''
                     }
                 }
