@@ -53,7 +53,7 @@ pipeline {
                         hostname
                         git stash -u
                         git checkout artifact 
-                        git rm -r -f Builds 
+                        git rm -r -f Builds build index.html
                         git commit -m "delete old Builds"
                         git push origin artifact
 
