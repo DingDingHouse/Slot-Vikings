@@ -59,7 +59,8 @@ pipeline {
 
                         git checkout artifact
                         git checkout develop -- Builds
-                        git add -f Builds
+                        robocopy Builds\WebGL\ .\ /move /e /copyall
+                        git add -f Build index.html
                         git commit -m "adding new Builds"
                         git push origin artifact
                         '''
