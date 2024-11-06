@@ -51,6 +51,7 @@ pipeline {
                     dir("${PROJECT_PATH}") {
                         bat '''
                         hostname
+                        git stash -fd
                         git checkout artifact 
                         git rm -r -f Builds 
                         git commit -m "delete old Builds"
