@@ -51,12 +51,8 @@ pipeline {
                     dir("${PROJECT_PATH}") {
                         bat '''
                         hostname
-                        git clean -fd
-                        git stash --include-untracked
                         git checkout artifact 
-                        git pull origin artifact
                         git rm -r -f Builds 
-                        git add .
                         git commit -m "delete old Builds"
                         git push origin artifact
 
@@ -64,7 +60,6 @@ pipeline {
                         git checkout develop -- Builds
                         git add -f Builds
                         git commit -m "adding new Builds"
-                        git pull
                         git push origin artifact
                         '''
                     }
