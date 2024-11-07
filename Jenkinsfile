@@ -11,18 +11,17 @@ pipeline {
     }
 
     environment {
-        PROJECT_PATH = "D:\\Slot-Vikings"
-        S3_BUCKET = "vikingsbucket"
+        PROJECT_PATH = "C:\\Games\\Slot-Vikings"
     }
 
     stages {
         stage('Checkout') {
             steps {
                 script {
+                    dir("${PROJECT_PATH}"){
                     bat '''
-                    cd /d D:\\
                     git config --global http.postBuffer 3221225472
-                    git clone git@github.com:DingDingHouse/Slot-Vikings.git D:\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
+                    git clone git@github.com:DingDingHouse/Slot-Vikings.git C:\\Games\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
                     cd Slot-Vikings
                     git checkout main
                     git fetch --all
@@ -31,8 +30,10 @@ pipeline {
                     git checkout develop
                     '''
                 }
+              }
             }
-        }
+          }
+    }
         stage('Build WebGL') {
             steps {
                 script {
@@ -51,9 +52,6 @@ pipeline {
                     dir("${PROJECT_PATH}") {
                         bat '''
                         hostname
-                        git add -f Builds
-                        git commit -m "new build"
-                        git push origin develop
                         git stash -u
                         git checkout main
                         git rm -r -f Build
