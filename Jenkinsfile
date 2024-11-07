@@ -18,22 +18,22 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    dir("${PROJECT_PATH}"){
-                    bat '''
-                    git config --global http.postBuffer 3221225472
-                    git clone git@github.com:DingDingHouse/Slot-Vikings.git C:\\Games\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
-                    cd Slot-Vikings
-                    git checkout main
-                    git fetch --all
-                    git reset --hard origin/develop
-                    git reset --hard origin/main
-                    git checkout develop
-                    '''
+                    dir("${PROJECT_PATH}") {
+                        bat '''
+                        git config --global http.postBuffer 3221225472
+                        git clone git@github.com:DingDingHouse/Slot-Vikings.git C:\\Games\\Slot-Vikings || echo "Repository already exists, pulling latest changes."
+                        cd Slot-Vikings
+                        git checkout main
+                        git fetch --all
+                        git reset --hard origin/develop
+                        git reset --hard origin/main
+                        git checkout develop
+                        '''
+                    }
                 }
-              }
             }
-          }
-    }
+        }
+
         stage('Build WebGL') {
             steps {
                 script {
@@ -54,9 +54,9 @@ pipeline {
                         hostname
                         git stash -u
                         git checkout main
-                        git rm -r -f Build
-                        git rm -r -f index.html
-                        git commit -m "delete old Builds"
+                        git rm -r -f Builds
+                        git rm -f index.html
+                        git commit -m "delete old Builds" || echo "Nothing to commit"
                         git push origin main
 
                         git checkout main
@@ -64,7 +64,7 @@ pipeline {
                         robocopy Builds\\WebGL\\ .\\ /move /e /copyall
                         git rm -r -f Builds
                         git add -f Build index.html
-                        git commit -m "adding new Builds"
+                        git commit -m "adding new Builds" || echo "Nothing to commit"
                         git push origin main
                         git checkout develop
                         git pull origin develop
